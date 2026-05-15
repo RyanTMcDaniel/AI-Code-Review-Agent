@@ -1,6 +1,6 @@
 import anthropic
 import json
-from tools import TOOLS, dispath_tool
+from tools import TOOLS, dispatch_tool
 from prompts import SYSTEM_PROMPT
 
 client = anthropic.Anthropic()
@@ -16,7 +16,7 @@ def run_agent(repo_path):
     while iteration < MAX_ITERATIONS:
         iteration += 1
 
-        response = client.message.create(
+        response = client.messages.create(
             model='claude-sonnet-4-20250514',
             max_tokens=4096,
             system=SYSTEM_PROMPT,
@@ -27,14 +27,14 @@ def run_agent(repo_path):
         messages.append({"role": "assistant", "content": response.content})
 
         if response.stop_reason == 'end_turn':
-            for block in response.context:
+            for block in response.content:
                 if hasattr(block, 'text'):
                     return block.text
                 
         tool_results = []
         for block in response.content:
             if block.type == 'tool_use':
-                result = dispath_tool(block.name, block.input)
+                result = dispatch_tool(block.name, block.input)
                 tool_results.append({
                     "type": "tool_result",
                     "tool_use_id": block.id,
