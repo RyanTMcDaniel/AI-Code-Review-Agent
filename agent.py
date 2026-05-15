@@ -17,7 +17,7 @@ def run_agent(repo_path):
         iteration += 1
 
         response = client.messages.create(
-            model='claude-sonnet-4-20250514',
+            model='claude-haiku-4-5',
             max_tokens=4096,
             system=SYSTEM_PROMPT,
             tools=TOOLS,
