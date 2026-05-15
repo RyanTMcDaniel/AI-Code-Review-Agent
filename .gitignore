@@ -1,0 +1,4 @@
+.env
+__pycache__/
+*.pyc
+review_output.md
